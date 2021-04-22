@@ -11,7 +11,6 @@
 
   <!-- Favicons -->
   <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -39,7 +38,7 @@
   <header id="header" class="fixed-top ">
     <div class="container d-flex align-items-center justify-content-lg-between">
 
-      <h1 class="logo me-auto me-lg-0"><a href="index.html">Cp<span>.</span></a></h1>
+      <h1 class="logo me-auto me-lg-0"><a href="companyfinder.html">Cf<span>.</span></a></h1>
 
     </div>
   </header><!-- End Header -->
@@ -56,13 +55,13 @@
       </div>
       <div class="row gy-4 mt-5 justify-content-center form-group has-search" data-aos="zoom-in" data-aos-delay="250">
       <div class="col-12">
-        <h3><i class="bi bi-search"></i><a href="">CNPJ</a></h3>
+        <h3></i><a href="">CNPJ</a></h3>
       </div>
 	  <div class="col-12 col-md-6 mb-4">
 		<form>
-			<input id="cnpj" type="text" class="form-control border-secondary" placeholder="Search..." required data-mask="00.000.000/0000-00" style="box-shadow: none">
+			<input id="cnpj" type="text" class="form-control border-secondary" placeholder="Search..." required data-mask="00.000.000/0000-00" style="box-shadow: none;">
 			<div id="msg"></div>
-			<button id = "search" type="button" onClick ="submitSearch()"  style=" visibility= hidden"/>
+			<button id = "search" type="button" onClick ="submitSearch()"  style="visibility: hidden;">
 		</form>
 	  </div>
     </div>
@@ -166,8 +165,7 @@
 	(function(){
 		document.getElementById("search").style.display = "none";
 	})();
-	
-	
+
 	function createMap(address) {
 		$.ajax({
 			url: 'https://nominatim.openstreetmap.org/search?state='+address[0]+'&city='+address[1]+'&street='+address[2]+','+address[3]+'&format=json',
@@ -193,10 +191,7 @@
 			}
 			
 		});
-		
-		
 	}
-	
     function checkCnpj(cnpj) {
       $.ajax({
         url: 'https://www.receitaws.com.br/v1/cnpj/' + cnpj.replace(/[^0-9]/g, ''),
@@ -209,9 +204,12 @@
 			createMap([data.uf, data.municipio, data.logradouro, data.numero])
 			
             document.getElementById('razao').value = data.nome;
-            document.getElementById('razao').value = data.nome;
             document.getElementById('situacao').value = data.situacao;
-            document.getElementById('fantasia').value = data.fantasia;
+            if (data.fantasia == ""){
+              document.getElementById('fantasia').value = 'Não possui nome fantasia no registro.';
+            } else {
+              document.getElementById('fantasia').value = data.fantasia;
+            }
             document.getElementById('cnpjview').value = data.cnpj;
             document.getElementById('abertura').value = data.abertura;
             $('#endereco').html(data.logradouro+', '+data.numero+', '+data.municipio+', '+data.uf+'.');
@@ -228,6 +226,7 @@
             }
             $('#telefone').html(data.telefone);
           }
+          console.log(data);
         },
 		error: function(){
 			alert("Máximo de 3 requisições por minuto!")
@@ -238,7 +237,7 @@
 	
 	function submitSearch(){
 		var cnpj = document.getElementById("cnpj").value;
-		var warning = "<div id= 'warning' class='alert alert-warning' fade show role='alert'>Verifique se o campo foi preenchido corretamente!</div>"
+		var warning = "<center><div id='warning' class='col-8 alert alert-warning mt-3' fade show role='alert' style='text-align:center'>Verifique se o campo foi preenchido corretamente!</div></center"
 		var divmap = "<div id= 'map' style='height: 600px'></div>"
 		
 		if(cnpj.length == 18){
